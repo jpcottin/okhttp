@@ -359,8 +359,7 @@ jobs:
             -gpu swiftshader_indirect
             -noaudio
             -no-boot-anim
-            -camera-back none
-            -memory 2048
+            -verbose
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
@@ -369,6 +368,12 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: ${{ matrix.api-level >= 34 && 'x86_64' || 'x86' }}
+          emulator-options: >
+            -no-window
+            -gpu swiftshader_indirect
+            -noaudio
+            -no-boot-anim
+            -verbose
           script: ./gradlew -PandroidBuild=true connectedCheck
         env:
           API_LEVEL: ${{ matrix.api-level }}
