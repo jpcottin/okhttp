@@ -304,6 +304,7 @@ jobs:
           - 23
           - 29
           - 34
+          - 37
 
     steps:
       - name: Checkout
@@ -367,7 +368,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          arch: ${{ matrix.api-level == '34' && 'x86_64' || 'x86' }}
+          arch: ${{ matrix.api-level >= 34 && 'x86_64' || 'x86' }}
           script: ./gradlew -PandroidBuild=true connectedCheck
         env:
           API_LEVEL: ${{ matrix.api-level }}
