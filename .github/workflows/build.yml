@@ -388,6 +388,8 @@ jobs:
             -noaudio
             -no-boot-anim
             -verbose
+            -show-kernel
+            -debug-metrics
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
@@ -405,6 +407,8 @@ jobs:
             -noaudio
             -no-boot-anim
             -verbose
+            -show-kernel
+            -debug-metrics
           script: ./gradlew -PandroidBuild=true connectedCheck
         env:
           API_LEVEL: ${{ matrix.api-level }}
