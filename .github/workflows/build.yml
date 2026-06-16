@@ -303,18 +303,23 @@ jobs:
           - api-level: 21
             arch: x86
             target: default
+            disk-size: 2048M
           - api-level: 23
             arch: x86
             target: default
+            disk-size: 2048M
           - api-level: 29
             arch: x86
             target: default
+            disk-size: 2048M
           - api-level: 34
             arch: x86_64
             target: default
+            disk-size: 2048M
           - api-level: "37.0"
             arch: x86_64
             target: google_apis_ps16k
+            disk-size: 3072M
 
     steps:
       - name: Checkout
@@ -364,6 +369,7 @@ jobs:
           force-avd-creation: false
           arch: ${{ matrix.arch }}
           target: ${{ matrix.target }}
+          disk-size: ${{ matrix.disk-size }}
           # No window, no audio, and use swiftshader for headless environments
           emulator-options: >
             -no-window
@@ -384,6 +390,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: ${{ matrix.arch }}
           target: ${{ matrix.target }}
+          disk-size: ${{ matrix.disk-size }}
           emulator-options: >
             -no-window
             -gpu swiftshader_indirect
