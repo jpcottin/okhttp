@@ -299,12 +299,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level:
-          - 21
-          - 23
-          - 29
-          - 34
-          - 37
+        include:
+          - api-level: 21
+            arch: x86
+            target: default
+          - api-level: 23
+            arch: x86
+            target: default
+          - api-level: 29
+            arch: x86
+            target: default
+          - api-level: 34
+            arch: x86_64
+            target: default
+          - api-level: "37.0"
+            arch: x86_64
+            target: google_apis_ps16k
 
     steps:
       - name: Checkout
@@ -339,7 +349,7 @@ jobs:
         uses: actions/cache@v5
         id: avd-cache
         with:
-          key: avd-${{ runner.os }}-${{ matrix.api-level }}-${{ matrix.api-level >= 30 && 'x86_64' || 'x86' }}
+          key: avd-${{ runner.os }}-${{ matrix.api-level }}-${{ matrix.arch }}-${{ matrix.target }}
           path: |
             ~/.android/avd/*
             ~/.android/adb*
@@ -352,7 +362,8 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           force-avd-creation: false
-          arch: ${{ matrix.api-level >= 30 && 'x86_64' || 'x86' }}
+          arch: ${{ matrix.arch }}
+          target: ${{ matrix.target }}
           # No window, no audio, and use swiftshader for headless environments
           emulator-options: >
             -no-window
@@ -367,7 +378,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          arch: ${{ matrix.api-level >= 34 && 'x86_64' || 'x86' }}
+          arch: ${{ matrix.arch }}
+          target: ${{ matrix.target }}
           emulator-options: >
             -no-window
             -gpu swiftshader_indirect
