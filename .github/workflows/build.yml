@@ -329,7 +329,7 @@ jobs:
             target: google_apis_ps16k
             ram-size: 4096M
             disk-size: 6144M
-            gpu: lavapipe
+            gpu: swiftshader_indirect
 
     steps:
       - name: Checkout
