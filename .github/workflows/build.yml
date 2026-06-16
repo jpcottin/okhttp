@@ -304,22 +304,32 @@ jobs:
             arch: x86
             target: default
             ram-size: 2048M
+            disk-size: 4096M
+            gpu: swiftshader_indirect
           - api-level: 23
             arch: x86
             target: default
             ram-size: 2048M
+            disk-size: 4096M
+            gpu: swiftshader_indirect
           - api-level: 29
             arch: x86
             target: default
             ram-size: 2048M
+            disk-size: 4096M
+            gpu: swiftshader_indirect
           - api-level: 34
             arch: x86_64
             target: default
             ram-size: 2048M
+            disk-size: 4096M
+            gpu: swiftshader_indirect
           - api-level: "37.0"
             arch: x86_64
             target: google_apis_ps16k
             ram-size: 4096M
+            disk-size: 6144M
+            gpu: lavapipe
 
     steps:
       - name: Checkout
@@ -370,11 +380,11 @@ jobs:
           arch: ${{ matrix.arch }}
           target: ${{ matrix.target }}
           ram-size: ${{ matrix.ram-size }}
-          disk-size: 4096M
+          disk-size: ${{ matrix.disk-size }}
           # No window, no audio, and use swiftshader for headless environments
           emulator-options: >
             -no-window
-            -gpu swiftshader_indirect
+            -gpu ${{ matrix.gpu }}
             -noaudio
             -no-boot-anim
             -verbose
@@ -388,10 +398,10 @@ jobs:
           arch: ${{ matrix.arch }}
           target: ${{ matrix.target }}
           ram-size: ${{ matrix.ram-size }}
-          disk-size: 4096M
+          disk-size: ${{ matrix.disk-size }}
           emulator-options: >
             -no-window
-            -gpu swiftshader_indirect
+            -gpu ${{ matrix.gpu }}
             -noaudio
             -no-boot-anim
             -verbose
