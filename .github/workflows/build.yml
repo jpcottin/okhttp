@@ -303,18 +303,23 @@ jobs:
           - api-level: 21
             arch: x86
             target: default
+            ram-size: 2048M
           - api-level: 23
             arch: x86
             target: default
+            ram-size: 2048M
           - api-level: 29
             arch: x86
             target: default
+            ram-size: 2048M
           - api-level: 34
             arch: x86_64
             target: default
+            ram-size: 2048M
           - api-level: "37.0"
             arch: x86_64
             target: google_apis_ps16k
+            ram-size: 4096M
 
     steps:
       - name: Checkout
@@ -364,13 +369,13 @@ jobs:
           force-avd-creation: false
           arch: ${{ matrix.arch }}
           target: ${{ matrix.target }}
+          ram-size: ${{ matrix.ram-size }}
           # No window, no audio, and use swiftshader for headless environments
           emulator-options: >
             -no-window
             -gpu swiftshader_indirect
             -noaudio
             -no-boot-anim
-            -memory 4096
             -verbose
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
@@ -381,12 +386,12 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: ${{ matrix.arch }}
           target: ${{ matrix.target }}
+          ram-size: ${{ matrix.ram-size }}
           emulator-options: >
             -no-window
             -gpu swiftshader_indirect
             -noaudio
             -no-boot-anim
-            -memory 4096
             -verbose
           script: ./gradlew -PandroidBuild=true connectedCheck
         env:
