@@ -370,7 +370,7 @@ jobs:
             -gpu swiftshader_indirect
             -noaudio
             -no-boot-anim
-            -memory 3072
+            -memory 4096
             -verbose
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
@@ -386,7 +386,7 @@ jobs:
             -gpu swiftshader_indirect
             -noaudio
             -no-boot-anim
-            -memory 3072
+            -memory 4096
             -verbose
           script: ./gradlew -PandroidBuild=true connectedCheck
         env:
