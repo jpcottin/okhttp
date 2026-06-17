@@ -435,7 +435,8 @@ jobs:
             -metrics-collection
           script: |
             adb wait-for-device
-            adb logcat > ${{ github.workspace }}/emulator_logcat.txt &
+            # Reconnecting loop to capture logcat across guest reboots and connection drops
+            while true; do adb logcat -v time >> ${{ github.workspace }}/emulator_logcat.txt || true; sleep 1; done &
             ./gradlew -PandroidBuild=true connectedCheck
         env:
           API_LEVEL: ${{ matrix.api-level }}
