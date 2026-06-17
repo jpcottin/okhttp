@@ -400,6 +400,7 @@ jobs:
           disk-size: ${{ matrix.disk-size }}
           ram-size: ${{ matrix.ram-size }}
           heap-size: ${{ matrix.heap-size }}
+          sdcard-path-or-size: 512M
           # No window, no audio, and use matrix-defined gpu for headless environments
           emulator-options: >
             -no-window
@@ -422,6 +423,7 @@ jobs:
           disk-size: ${{ matrix.disk-size }}
           ram-size: ${{ matrix.ram-size }}
           heap-size: ${{ matrix.heap-size }}
+          sdcard-path-or-size: 512M
           emulator-options: >
             -no-window
             ${{ matrix.gpu }}
