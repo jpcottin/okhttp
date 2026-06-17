@@ -328,6 +328,13 @@ jobs:
             gpu: -gpu swiftshader_indirect
             ram-size: 2048M
             heap-size: 512M
+          - api-level: "36.0"
+            arch: x86_64
+            target: default
+            disk-size: 2048M
+            gpu: -gpu swiftshader_indirect
+            ram-size: 2048M
+            heap-size: 512M
           - api-level: "37.0"
             arch: x86_64
             target: google_apis_ps16k
