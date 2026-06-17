@@ -433,8 +433,10 @@ jobs:
             -verbose
             -debug-metrics
             -metrics-collection
-            -logcat-output ${{ github.workspace }}/emulator_logcat.txt
-          script: ./gradlew -PandroidBuild=true connectedCheck
+          script: |
+            adb wait-for-device
+            adb logcat > ${{ github.workspace }}/emulator_logcat.txt &
+            ./gradlew -PandroidBuild=true connectedCheck
         env:
           API_LEVEL: ${{ matrix.api-level }}
 
