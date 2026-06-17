@@ -305,26 +305,36 @@ jobs:
             target: default
             disk-size: 2048M
             gpu: -gpu swiftshader_indirect
+            ram-size: 2048M
+            heap-size: 512M
           - api-level: 23
             arch: x86
             target: default
             disk-size: 2048M
             gpu: -gpu swiftshader_indirect
+            ram-size: 2048M
+            heap-size: 512M
           - api-level: 29
             arch: x86
             target: default
             disk-size: 2048M
             gpu: -gpu swiftshader_indirect
+            ram-size: 2048M
+            heap-size: 512M
           - api-level: 34
             arch: x86_64
             target: default
             disk-size: 2048M
             gpu: -gpu swiftshader_indirect
+            ram-size: 2048M
+            heap-size: 512M
           - api-level: "37.0"
             arch: x86_64
             target: google_apis_ps16k
-            disk-size: 3072M
+            disk-size: 4096M
             gpu: ""
+            ram-size: 4096M
+            heap-size: 1024M
 
     steps:
       - name: Checkout
@@ -375,6 +385,8 @@ jobs:
           arch: ${{ matrix.arch }}
           target: ${{ matrix.target }}
           disk-size: ${{ matrix.disk-size }}
+          ram-size: ${{ matrix.ram-size }}
+          heap-size: ${{ matrix.heap-size }}
           # No window, no audio, and use matrix-defined gpu for headless environments
           emulator-options: >
             -no-window
@@ -396,6 +408,8 @@ jobs:
           arch: ${{ matrix.arch }}
           target: ${{ matrix.target }}
           disk-size: ${{ matrix.disk-size }}
+          ram-size: ${{ matrix.ram-size }}
+          heap-size: ${{ matrix.heap-size }}
           emulator-options: >
             -no-window
             ${{ matrix.gpu }}
