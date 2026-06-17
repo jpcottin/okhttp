@@ -433,6 +433,7 @@ jobs:
             -verbose
             -debug-metrics
             -metrics-collection
+            -logcat-output ${{ github.workspace }}/emulator_logcat.txt
           script: ./gradlew -PandroidBuild=true connectedCheck
         env:
           API_LEVEL: ${{ matrix.api-level }}
@@ -440,13 +441,12 @@ jobs:
       - name: Dump guest diagnostics on failure
         if: failure()
         run: |
-          echo "=== CLI Services ==="
-          adb shell service list || true
-          echo "=== Last 1000 lines of Logcat ==="
-          adb logcat -d -t 1000 || true
-          echo "=== Tombstones ==="
-          adb shell "ls -la /data/tombstones/" || true
-          adb shell "cat /data/tombstones/tombstone_*" || true
+          echo "=== Emulator Logcat (Last 1000 lines) ==="
+          if [ -f "${{ github.workspace }}/emulator_logcat.txt" ]; then
+            tail -n 1000 "${{ github.workspace }}/emulator_logcat.txt"
+          else
+            echo "Logcat file not found!"
+          fi
 
       - name: Build Release App
         run: ./gradlew android-test-app:lint android-test-app:assembleRelease
