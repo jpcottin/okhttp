@@ -402,7 +402,6 @@ jobs:
             -no-boot-anim
             -memory 4096
             -verbose
-            -show-kernel
             -debug-metrics
             -metrics-collection
           disable-animations: true
@@ -424,7 +423,6 @@ jobs:
             -no-boot-anim
             -memory 4096
             -verbose
-            -show-kernel
             -debug-metrics
             -metrics-collection
           script: ./gradlew -PandroidBuild=true connectedCheck
