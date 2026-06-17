@@ -437,6 +437,17 @@ jobs:
         env:
           API_LEVEL: ${{ matrix.api-level }}
 
+      - name: Dump guest diagnostics on failure
+        if: failure()
+        run: |
+          echo "=== CLI Services ==="
+          adb shell service list || true
+          echo "=== Last 1000 lines of Logcat ==="
+          adb logcat -d -t 1000 || true
+          echo "=== Tombstones ==="
+          adb shell "ls -la /data/tombstones/" || true
+          adb shell "cat /data/tombstones/tombstone_*" || true
+
       - name: Build Release App
         run: ./gradlew android-test-app:lint android-test-app:assembleRelease
 
