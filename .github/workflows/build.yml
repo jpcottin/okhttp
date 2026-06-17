@@ -306,6 +306,7 @@ jobs:
             disk-size: 2048M
             gpu: -gpu swiftshader_indirect
             ram-size: 2048M
+            ram-size-numeric: 2048
             heap-size: 512M
           - api-level: 23
             arch: x86
@@ -313,6 +314,7 @@ jobs:
             disk-size: 2048M
             gpu: -gpu swiftshader_indirect
             ram-size: 2048M
+            ram-size-numeric: 2048
             heap-size: 512M
           - api-level: 29
             arch: x86
@@ -320,6 +322,7 @@ jobs:
             disk-size: 2048M
             gpu: -gpu swiftshader_indirect
             ram-size: 2048M
+            ram-size-numeric: 2048
             heap-size: 512M
           - api-level: 34
             arch: x86_64
@@ -327,6 +330,7 @@ jobs:
             disk-size: 2048M
             gpu: -gpu swiftshader_indirect
             ram-size: 2048M
+            ram-size-numeric: 2048
             heap-size: 512M
           - api-level: 36
             arch: x86_64
@@ -334,6 +338,7 @@ jobs:
             disk-size: 2048M
             gpu: -gpu swiftshader_indirect
             ram-size: 2048M
+            ram-size-numeric: 2048
             heap-size: 512M
           - api-level: "37.0"
             arch: x86_64
@@ -341,7 +346,8 @@ jobs:
             disk-size: 4096M
             gpu: ""
             ram-size: 4096M
-            heap-size: 1024M
+            ram-size-numeric: 4096
+            heap-size: 768M
 
     steps:
       - name: Checkout
@@ -400,7 +406,7 @@ jobs:
             ${{ matrix.gpu }}
             -noaudio
             -no-boot-anim
-            -memory 4096
+            -memory ${{ matrix.ram-size-numeric }}
             -verbose
             -debug-metrics
             -metrics-collection
@@ -421,7 +427,7 @@ jobs:
             ${{ matrix.gpu }}
             -noaudio
             -no-boot-anim
-            -memory 4096
+            -memory ${{ matrix.ram-size-numeric }}
             -verbose
             -debug-metrics
             -metrics-collection
