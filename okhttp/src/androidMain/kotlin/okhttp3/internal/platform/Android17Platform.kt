@@ -39,6 +39,11 @@ import okhttp3.ech.EchModeConfiguration
 import okhttp3.internal.SuppressSignatureCheck
 import okhttp3.internal.platform.AndroidPlatform.Companion.Tag
 import okhttp3.internal.platform.android.Android17SocketAdapter
+import okhttp3.internal.platform.android.Android10SocketAdapter
+import okhttp3.internal.platform.android.AndroidSocketAdapter
+import okhttp3.internal.platform.android.BouncyCastleSocketAdapter
+import okhttp3.internal.platform.android.ConscryptSocketAdapter
+import okhttp3.internal.platform.android.DeferredSocketAdapter
 import okhttp3.internal.platform.android.AndroidCertificateChainCleaner
 import okhttp3.internal.platform.android.AndroidEchModeConfiguration
 import okhttp3.internal.tls.CertificateChainCleaner
@@ -59,11 +64,19 @@ class Android17Platform
     ContextAwarePlatform {
     override var applicationContext: Context? = null
 
-    private val socketAdapter by lazy {
-      Android17SocketAdapter.buildIfSupported()!!
-    }
+    private val socketAdapters =
+      listOfNotNull(
+        Android17SocketAdapter.buildIfSupported(),
+        Android10SocketAdapter.buildIfSupported(),
+        DeferredSocketAdapter(AndroidSocketAdapter.playProviderFactory),
+        DeferredSocketAdapter(ConscryptSocketAdapter.factory),
+        DeferredSocketAdapter(BouncyCastleSocketAdapter.factory),
+      ).filter { it.isSupported() }
 
-    override fun trustManager(sslSocketFactory: SSLSocketFactory): X509TrustManager? = socketAdapter.trustManager(sslSocketFactory)
+    override fun trustManager(sslSocketFactory: SSLSocketFactory): X509TrustManager? =
+      socketAdapters
+        .find { it.matchesSocketFactory(sslSocketFactory) }
+        ?.trustManager(sslSocketFactory)
 
     override fun newSSLContext(): SSLContext {
       StrictMode.noteSlowCall("newSSLContext")
@@ -83,15 +96,18 @@ class Android17Platform
       hostname: String?,
       protocols: List<Protocol>,
     ) {
-      socketAdapter.configureTlsExtensions(
-        call = call,
-        sslSocket = sslSocket,
-        hostname = hostname,
-        protocols = protocols,
-      )
+      socketAdapters
+        .find { it.matchesSocket(sslSocket) }
+        ?.configureTlsExtensions(
+          call = call,
+          sslSocket = sslSocket,
+          hostname = hostname,
+          protocols = protocols,
+        )
     }
 
-    override fun getSelectedProtocol(sslSocket: SSLSocket): String? = socketAdapter.getSelectedProtocol(sslSocket)
+    override fun getSelectedProtocol(sslSocket: SSLSocket): String? =
+      socketAdapters.find { it.matchesSocket(sslSocket) }?.getSelectedProtocol(sslSocket)
 
     @RequiresApi(36)
     override fun getStackTraceForCloseable(closer: String): Any = CloseGuard().apply { open(closer) }
