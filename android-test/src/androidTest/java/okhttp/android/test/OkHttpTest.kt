@@ -550,7 +550,13 @@ class OkHttpTest {
     try {
       client.newCall(request).execute()
       fail<Any>("")
-    } catch (_: SSLPeerUnverifiedException) {
+    } catch (e: Exception) {
+      val hasPeerUnverified = e is SSLPeerUnverifiedException ||
+          e.suppressedExceptions.any { it is SSLPeerUnverifiedException } ||
+          e.cause is SSLPeerUnverifiedException
+      if (!hasPeerUnverified) {
+        throw e
+      }
     }
   }
 

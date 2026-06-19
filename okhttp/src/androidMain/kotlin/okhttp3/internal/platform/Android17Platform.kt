@@ -128,7 +128,7 @@ class Android17Platform
     internal override val echModeConfiguration: EchModeConfiguration = AndroidEchModeConfiguration()
 
     override fun buildCertificateChainCleaner(trustManager: X509TrustManager): CertificateChainCleaner =
-      AndroidCertificateChainCleaner.buildIfSupported(trustManager)!!
+      AndroidCertificateChainCleaner.buildIfSupported(trustManager) ?: super.buildCertificateChainCleaner(trustManager)
 
     override fun log(
       message: String,
