@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - agent/ech-review-fixes
   pull_request:
     types: [opened, labeled, unlabeled, synchronize]
 
