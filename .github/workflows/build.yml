@@ -344,7 +344,7 @@ jobs:
             arch: x86_64
             target: google_apis_ps16k
             disk-size: 4096M
-            gpu: -gpu swiftshader_indirect
+            gpu: -gpu auto
             ram-size: 4096M
             ram-size-numeric: 4096
             heap-size: 768M
@@ -400,7 +400,6 @@ jobs:
           disk-size: ${{ matrix.disk-size }}
           ram-size: ${{ matrix.ram-size }}
           heap-size: ${{ matrix.heap-size }}
-          sdcard-path-or-size: 512M
           # No window, no audio, and use matrix-defined gpu for headless environments
           emulator-options: >
             -no-window
@@ -408,6 +407,7 @@ jobs:
             -noaudio
             -no-boot-anim
             -memory ${{ matrix.ram-size-numeric }}
+            -feature GLDirectMem,HasSharedSlotsHostMemoryAllocator
             -verbose
             -debug-metrics
             -metrics-collection
@@ -423,13 +423,13 @@ jobs:
           disk-size: ${{ matrix.disk-size }}
           ram-size: ${{ matrix.ram-size }}
           heap-size: ${{ matrix.heap-size }}
-          sdcard-path-or-size: 512M
           emulator-options: >
             -no-window
             ${{ matrix.gpu }}
             -noaudio
             -no-boot-anim
             -memory ${{ matrix.ram-size-numeric }}
+            -feature GLDirectMem,HasSharedSlotsHostMemoryAllocator
             -verbose
             -debug-metrics
             -metrics-collection
