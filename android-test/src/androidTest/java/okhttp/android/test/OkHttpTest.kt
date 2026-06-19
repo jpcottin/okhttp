@@ -127,11 +127,7 @@ class OkHttpTest {
       logger = Logger.getLogger(OkHttpTest::class.java.name)
     }
 
-  private var client: OkHttpClient =
-    clientTestRule
-      .newClientBuilder()
-      .addInterceptor(CompressionInterceptor(Zstd, Brotli, Gzip))
-      .build()
+  private lateinit var client: OkHttpClient
 
   private val moshi =
     Moshi
@@ -148,6 +144,10 @@ class OkHttpTest {
   fun setup() {
     // Needed because of Platform.resetForTests
     PlatformRegistry.applicationContext = ApplicationProvider.getApplicationContext<Context>()
+    client = clientTestRule
+      .newClientBuilder()
+      .addInterceptor(CompressionInterceptor(Zstd, Brotli, Gzip))
+      .build()
   }
 
   @Test
