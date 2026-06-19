@@ -86,6 +86,7 @@ import okhttp3.dnsoverhttps.DnsOverHttps
 import okhttp3.internal.concurrent.TaskRunner
 import okhttp3.internal.http2.Http2
 import okhttp3.internal.platform.Android10Platform
+import okhttp3.internal.platform.Android17Platform
 import okhttp3.internal.platform.AndroidPlatform
 import okhttp3.internal.platform.Platform
 import okhttp3.internal.platform.PlatformRegistry
@@ -154,7 +155,9 @@ class OkHttpTest {
   fun testPlatform() {
     assertTrue(Platform.isAndroid)
 
-    if (Build.VERSION.SDK_INT >= 29) {
+    if (Build.VERSION.SDK_INT >= 37) {
+      assertTrue(Platform.get() is Android17Platform)
+    } else if (Build.VERSION.SDK_INT >= 29) {
       assertTrue(Platform.get() is Android10Platform)
     } else {
       assertTrue(Platform.get() is AndroidPlatform)
@@ -328,7 +331,8 @@ class OkHttpTest {
         assertEquals(Protocol.HTTP_2, response.protocol)
         assertEquals(200, response.code)
         assertEquals("com.google.android.gms.org.conscrypt.Java8FileDescriptorSocket", socketClass)
-        assertEquals(TlsVersion.TLS_1_2, response.handshake?.tlsVersion)
+        val expectedTls = if (Build.VERSION.SDK_INT >= 37) TlsVersion.TLS_1_3 else TlsVersion.TLS_1_2
+        assertEquals(expectedTls, response.handshake?.tlsVersion)
       }
     } finally {
       Security.removeProvider("GmsCore_OpenSSL")

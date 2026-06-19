@@ -47,14 +47,17 @@ import okio.ByteString.Companion.toByteString
 internal class AndroidAsyncDns
   @RequiresApi(36)
   internal constructor(
-    private val dnsResolver: DnsResolver =
-      HandlerThread("OkHttp AsyncDns").let { handlerThread ->
-        handlerThread.start()
-        DnsResolver(PlatformRegistry.applicationContext!!, handlerThread.looper)
-      },
+    private val dnsResolver: DnsResolver? = null,
     private val executor: Executor = Executor { it.run() },
     private val timeoutMillis: Int = 5_000,
   ) : AsyncDns {
+    private val activeDnsResolver: DnsResolver by lazy {
+      dnsResolver ?: HandlerThread("OkHttp AsyncDns").let { handlerThread ->
+        handlerThread.start()
+        DnsResolver(PlatformRegistry.applicationContext!!, handlerThread.looper)
+      }
+    }
+
     override fun newCall(
       hostname: String,
       addressesOnly: Boolean,
@@ -86,7 +89,7 @@ internal class AndroidAsyncDns
       ) {
         val call = this
         try {
-          dnsResolver.query(
+          activeDnsResolver.query(
             null,
             hostname,
             type,
@@ -118,7 +121,7 @@ internal class AndroidAsyncDns
         val call = this
         try {
           @Suppress("WrongConstant")
-          dnsResolver.query(
+          activeDnsResolver.query(
             null,
             hostname,
             DnsResolver.FLAG_EMPTY,
